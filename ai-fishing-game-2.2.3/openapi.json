@@ -1,0 +1,42 @@
+{
+  "openapi": "3.0.0",
+  "info": { "title": "AI钓鱼游戏 API", "version": "1.0.0" },
+  "paths": {
+    "/fish": {
+      "post": {
+        "summary": "执行钓鱼动作",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "action": { "type": "string", "description": "钓鱼指令，如 help、cast、status" },
+                  "times": { "type": "integer", "description": "重复次数", "default": 1 }
+                },
+                "required": ["action"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "output": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
