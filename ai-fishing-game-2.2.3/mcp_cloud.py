@@ -29,7 +29,7 @@ def ping() -> str:
 async def ping_endpoint(request):
     return JSONResponse({"status": "ok", "service": "ai-games"})
 
-mcp.add_resource("/ping", ping_endpoint, methods=["GET"])
+mcp.add_route("/ping", ping_endpoint, methods=["GET"])
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
