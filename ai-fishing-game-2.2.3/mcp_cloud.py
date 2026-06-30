@@ -25,13 +25,14 @@ def play_detective(action: str) -> str:
 def ping() -> str:
     return "pong"
 
-# 添加健康检查路由
+# 健康检查路由
 async def ping_endpoint(request):
     return JSONResponse({"status": "ok", "service": "ai-games"})
 
 async def root_endpoint(request):
     return JSONResponse({"message": "AI游戏集合运行中，MCP端点在 /sse，健康检查在 /ping"})
 
+# 添加到 mcp 应用
 mcp.app.add_route("/ping", ping_endpoint, methods=["GET"])
 mcp.app.add_route("/", root_endpoint, methods=["GET"])
 
