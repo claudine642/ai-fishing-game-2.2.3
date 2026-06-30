@@ -27,7 +27,7 @@ def play_detective(action: str) -> str:
 def ping() -> str:
     return "pong"
 
-# 挂载 MCP 的 SSE 端点
+# 使用 mcp.sse_app() 挂载 MCP 端点
 app.mount("/sse", mcp.sse_app())
 
 @app.get("/ping")
