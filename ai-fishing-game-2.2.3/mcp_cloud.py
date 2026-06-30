@@ -1,13 +1,11 @@
 import os
-from fastapi import FastAPI
 from fastmcp import FastMCP
-import uvicorn
+from starlette.responses import JSONResponse
 
 from fishing import cmd as fishing_cmd
 from detective import cmd as detective_cmd
 from detective import new_game as detective_new_game
 
-app = FastAPI(title="AI游戏集合")
 mcp = FastMCP("AI游戏集合")
 
 @mcp.tool
@@ -27,17 +25,16 @@ def play_detective(action: str) -> str:
 def ping() -> str:
     return "pong"
 
-# 使用 mcp.sse_app() 挂载 MCP 端点
-app.mount("/sse", mcp.sse_app())
+# 添加健康检查路由
+async def ping_endpoint(request):
+    return JSONResponse({"status": "ok", "service": "ai-games"})
 
-@app.get("/ping")
-async def health_ping():
-    return {"status": "ok", "service": "ai-games"}
+async def root_endpoint(request):
+    return JSONResponse({"message": "AI游戏集合运行中，MCP端点在 /sse，健康检查在 /ping"})
 
-@app.get("/")
-async def root():
-    return {"message": "AI游戏集合运行中，MCP端点在 /sse，健康检查在 /ping"}
+mcp.app.add_route("/ping", ping_endpoint, methods=["GET"])
+mcp.app.add_route("/", root_endpoint, methods=["GET"])
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    mcp.run(transport="sse", host="0.0.0.0", port=port)
